@@ -1,6 +1,6 @@
 export type Role = "制片" | "导演" | "演员统筹" | "场记";
 export type SceneStatus = "草稿" | "已确认" | "拍摄中" | "已完成";
-export type ConflictType = "演员档期" | "场地占用" | "器材借用" | "转场时间";
+export type ConflictType = "演员档期" | "场地占用" | "器材借用" | "转场时间" | "天光窗口";
 
 export interface Talent {
   id: string;
@@ -11,6 +11,8 @@ export interface Talent {
 export interface Location {
   id: string;
   name: string;
+  /** 日出时间（HH:mm），用于推算天光窗口 */
+  dawn: string;
 }
 
 export interface Equipment {
@@ -30,6 +32,15 @@ export interface Scene {
   equipmentIds: string[];
   status: SceneStatus;
   locked: boolean;
+  /** 天光戏：必须在天亮前/天亮后窗口内拍完 */
+  needsLight: boolean;
+  /** 夜戏已占住灯组与演员档期 */
+  held: boolean;
+  /** 拆成两天时的分组标识 */
+  splitGroup?: string;
+  splitPart?: number;
+  /** 窗口或场地变更后退回待确认，需重新确认 */
+  needsReconfirm?: boolean;
 }
 
 export interface Conflict {
