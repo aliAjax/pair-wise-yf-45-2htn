@@ -1,6 +1,21 @@
 export type Role = "制片" | "导演" | "演员统筹" | "场记";
 export type SceneStatus = "草稿" | "已确认" | "拍摄中" | "已完成";
-export type ConflictType = "演员档期" | "场地占用" | "器材借用" | "转场时间";
+export type ConflictType = "演员档期" | "场地占用" | "器材借用" | "转场时间" | "天光窗口";
+
+export interface DaylightWindow {
+  id: string;
+  label: string;
+  start: string;
+  end: string;
+}
+
+export interface DaylightFit {
+  fits: boolean;
+  reason: "ok" | "outside" | "tooLong";
+  windowLabel: string;
+  overflowMin: number;
+  durationMin: number;
+}
 
 export interface Talent {
   id: string;
@@ -11,6 +26,7 @@ export interface Talent {
 export interface Location {
   id: string;
   name: string;
+  windows: DaylightWindow[];
 }
 
 export interface Equipment {
@@ -30,6 +46,10 @@ export interface Scene {
   equipmentIds: string[];
   status: SceneStatus;
   locked: boolean;
+  needsDaylight?: boolean;
+  nightHold?: boolean;
+  holdNote?: string;
+  splitFrom?: string;
 }
 
 export interface Conflict {
